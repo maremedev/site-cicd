@@ -11,26 +11,26 @@ jobs:
   verifier:
     runs-on: ubuntu-latest
     steps:
-      - name: Récupérer le code
-        uses: actions/checkout@v7
+      - name: Recuperer le code
+        uses: actions/checkout@v4
 
-      - name: Vérifier que la page d'accueil existe
+      - name: Verifier que la page d'accueil existe
         run: test -f index.html
 
-      - name: Vérifier que la page a un titre
-        run: grep "<h1>" index.html
+      - name: Verifier que la page a un titre
+        run: grep -q '<h1>' index.html
 
-      - name: Utilisateur  un secret
-         run: echo "le secret vaut ${{ secrets.MESSAGES_SECRET  }}
+      - name: Utiliser un secret
+        run: echo "Le secret vaut ${{ secrets.MESSAGE_SECRET }}"
 
   construire:
     needs: verifier
     runs-on: ubuntu-latest
     steps:
-      - name: Récupérer le code
-        uses: actions/checkout@v7
+      - name: Recuperer le code
+        uses: actions/checkout@v4
 
-      - name: Préparer le site
+      - name: Preparer le site
         run: |
           mkdir -p _site
           cp *.html _site/
@@ -38,7 +38,7 @@ jobs:
           ls -l _site
 
       - name: Livrer l'artefact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: site-web
           path: _site/

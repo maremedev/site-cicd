@@ -1,5 +1,6 @@
 
 
+
 name: Livraison continue
 
 on:
@@ -21,7 +22,9 @@ jobs:
         run: grep -q '<h1>' index.html
 
       - name: Utiliser un secret
-        run: echo "Le secret vaut ${{ secrets.MESSAGE_SECRET }}"
+        env:
+          MESSAGE_SECRET: ${{ secrets.MESSAGE_SECRET }}
+        run: echo "Le secret vaut $MESSAGE_SECRET"
 
   construire:
     needs: verifier

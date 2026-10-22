@@ -1,7 +1,8 @@
 
 
 
-name: Livraison continue
+
+name: Livraison et déploiement continus
 
 on:
   push:
@@ -19,12 +20,7 @@ jobs:
         run: test -f index.html
 
       - name: Verifier que la page a un titre
-        run: grep -q '<h1>' index.html
-
-      - name: Utiliser un secret
-        env:
-          MESSAGE_SECRET: ${{ secrets.MESSAGE_SECRET }}
-        run: echo "Le secret vaut $MESSAGE_SECRET"
+        run: grep "<h1>" index.html
 
   construire:
     needs: verifier
@@ -40,9 +36,22 @@ jobs:
           echo "Version ${{ github.sha }} construite le $(date)" > _site/version.txt
           ls -l _site
 
-      - name: Livrer l'artefact
-        uses: actions/upload-artifact@v4
+      - name: Livrer l'artefact pour GitHub Pages
+        uses: actions/upload-pages-artifact@v4
         with:
-          name: site-web
           path: _site/
+
+  deployer:
+    needs: construire
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - name: Deployer sur GitHub Pages
+        id: deploiement
+        uses: actions/deploy-pages@v4
 

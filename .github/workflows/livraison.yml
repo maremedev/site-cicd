@@ -1,4 +1,5 @@
 
+
 name: Livraison continue
 
 on:
@@ -18,6 +19,9 @@ jobs:
 
       - name: Vérifier que la page a un titre
         run: grep "<h1>" index.html
+
+      - name: Utilisateur  un secret
+         run: echo "le secret vaut ${{ secrets.MESSAGES_SECRET  }}
 
   construire:
     needs: verifier
